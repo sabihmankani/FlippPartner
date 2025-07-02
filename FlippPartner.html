@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipp | Personalized Flyer Proposal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #000;
+        }
+        main {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+            z-index: 9;
+        }
+        .slide.active {
+            opacity: 1;
+            z-index: 10;
+            pointer-events: auto;
+        }
+        .slide-header, .slide-footer {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            background-color: #1f2937; /* gray-800 */
+            color: white;
+            padding: 1rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 20;
+        }
+        .slide-header {
+            top: 0;
+        }
+        .slide-footer {
+            bottom: 0;
+        }
+        .slide-content {
+            padding: 8rem 5rem;
+            flex-grow: 1;
+            overflow-y: auto;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .flipp-blue { color: #007aff; }
+        .nav-buttons-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .nav-button {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        .nav-button:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        .nav-button.hidden {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .persona-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            text-align: left;
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .persona-button:hover {
+            background-color: #f9fafb;
+        }
+        .persona-button.active {
+            background-color: #dbeafe;
+            border-color: #60a5fa;
+            font-weight: 600;
+        }
+        /* Special style for title slide */
+        #slide-1 {
+            background: linear-gradient(135deg, #2d3748, #1a202c);
+        }
+        #slide-1 .slide-header, #slide-1 .slide-footer {
+            background-color: rgba(0,0,0,0.2);
+        }
+        #slide-9 {
+            background-color: #2d3748; /* Dark Slate */
+        }
+        #slide-9 .slide-header, #slide-9 .slide-footer {
+            background-color: rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <main id="presentation-container">
+        <!-- Slide 1: Title -->
+        <section id="slide-1" class="slide active">
+            <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content flex items-center justify-center text-center text-white">
+                <div>
+                    <h1 class="text-5xl md:text-7xl font-extrabold mb-4 tracking-tight">Proposal for Dynamic Flyers</h1>
+                    <p class="text-xl md:text-2xl text-white/80">Unlocking Customer Loyalty Through Dynamic Flyers</p>
+                    <p class="mt-12 text-lg text-white/70">Prepared for Fresh Cart</p>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+
+        <!-- Slide 2: The Opportunity -->
+        <section id="slide-2" class="slide">
+             <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" class="h-6" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">The Opportunity: Deeper Shopper Connection</h2>
+                    <p class="text-lg md:text-xl text-gray-600 mb-12 max-w-4xl mx-auto">
+                        Today's shoppers expect relevance. The generic weekly flyer, while effective, treats all customers the same. By leveraging loyalty data, we can move from a one-to-many to a one-to-one conversation, driving higher engagement, increasing basket size, and fostering greater brand loyalty.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="p-8 text-center bg-blue-50 border-2 border-blue-100 rounded-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                            <h3 class="text-xl font-bold mb-2 text-blue-800">Boost Engagement</h3>
+                            <p class="text-gray-600">Deliver content that resonates with individual eating habits and preferences.</p>
+                        </div>
+                        <div class="p-8 text-center bg-green-50 border-2 border-green-100 rounded-xl">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <h3 class="text-xl font-bold mb-2 text-green-800">Increase Sales</h3>
+                            <p class="text-gray-600">Surface relevant offers to inspire purchases and increase average basket size.</p>
+                        </div>
+                        <div class="p-8 text-center bg-red-50 border-2 border-red-100 rounded-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            <h3 class="text-xl font-bold mb-2 text-red-800">Enhance Loyalty</h3>
+                            <p class="text-gray-600">Show customers you understand their needs, strengthening your relationship.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+        
+        
+        <!-- Slide 3: Current State (Revised) -->
+        <section id="slide-3" class="slide">
+            <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">How We Could Deliver Relevance Today</h2>
+                <p class="text-center text-lg text-gray-600 mb-12 max-w-4xl mx-auto">Our platform would deliver different flyer versions based on key user attributes and/or loyalty programs, ensuring a baseline of relevance for every shopper.</p>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="p-6 bg-blue-50 border-2 border-blue-100 rounded-xl text-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m0 18a9 9 0 009-9m-9 9a9 9 0 00-9-9" /></svg><h3 class="font-bold text-xl text-blue-800">Language</h3><p class="mt-2 text-gray-600">English & French versions.</p></div>
+                    <div class="p-6 bg-green-50 border-2 border-green-100 rounded-xl text-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg><h3 class="font-bold text-xl text-green-800">Location</h3><p class="mt-2 text-gray-600">Region-specific offers.</p></div>
+                    <div class="p-6 bg-yellow-50 border-2 border-yellow-100 rounded-xl text-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg><h3 class="font-bold text-xl text-yellow-800">Store</h3><p class="mt-2 text-gray-600">Selected store's flyer.</p></div>
+                    <div class="p-6 bg-red-50 border-2 border-red-100 rounded-xl text-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><h3 class="font-bold text-xl text-red-800">Date</h3><p class="mt-2 text-gray-600">Time-sensitive weekly deals.</p></div>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>con
+
+        <!-- Slide 4: How to Make the Flyer More Relevant? -->
+        <section id="slide-3" class="slide">
+             <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" class="h-6" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Making the Flyer More Relevant</h2>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4">From Generic to Personalized</h3>
+                        <p class="text-lg text-gray-600 mb-4">Click a persona below to see how the flyer could change to match their interests.</p>
+                        <div id="persona-buttons">
+                            <button class="persona-button active" data-image="healthyeater.png"
+                                <span class="font-semibold">"The Healthy Eater":</span> Prioritize organic produce, gluten-free items, and plant-based proteins.
+                            </button>
+                            <button class="persona-button" data-image="familyfriendly.png"
+                                <span class="font-semibold">"The Family Meal Planner":</span> Highlight bulk items, kid-friendly snacks, and easy weeknight dinner solutions.
+                            </button>
+                            <button class="persona-button" data-image="gourmet.png">
+                                <span class="font-semibold">"The Gourmet Cook":</span> Showcase specialty cheeses, premium cuts of meat, and artisanal ingredients.
+                            </button>
+                             <button class="persona-button" data-image="budgetfriendly.png">
+                                <span class="font-semibold">"The Budget Shopper":</span> Feature key sale items, private label brands, and high-value deals on the front page.
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <img id="persona-image" src="healthyeater.png" alt="Dynamic Flyer Concept" class="rounded-lg shadow-lg transition-all duration-300">
+                        <p class="text-center mt-2 text-sm text-gray-500">Concept: Different users see different hero products.</p>
+                    </div>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+
+
+         <!-- Slide 5: The Digital Flyer Experience -->
+        <section id="slide-5" class="slide">
+            <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" class="h-6" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">The Digital Flyer Experience</h2>
+                <p class="text-center text-lg text-gray-600 mb-8 max-w-3xl mx-auto">The experience will feel native and intuitive, maintaining the familiar interface while showcasing more relevant content.</p>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="text-center"><h3 class="text-2xl font-bold mb-4">Flipp App (Language:Mandarin)</h3><div class="bg-white p-2 rounded-2xl shadow-2xl max-w-xs mx-auto border"><div class="bg-gray-800 rounded-t-lg p-2 text-white text-xs flex justify-between items-center"><span>9:41</span><span>Fresh Cart</span><span>LTE</span></div><p class="font-semibold my-2 text-md">Regional Sales</p><img src="madarinflyer.png" alt="Personalized Flyer in Flipp App" class="w-full rounded-b-lg"></div><p class="mt-3 text-gray-600 text-sm">"The Healthy Eater" sees organic produce featured.</p></div>
+                    <div class="text-center"><h3 class="text-2xl font-bold mb-4">Flipp.com (City:Montreal)</h3><div class="bg-white p-4 rounded-xl shadow-2xl max-w-md mx-auto border"><p class="font-semibold mb-2 text-md">Best Sellers in Montreal</p><img src="Frenchflyer.png" alt="Personalized Flyer on Flipp.com" class="w-full rounded-lg"></div><p class="mt-3 text-gray-600 text-sm">"The Family Meal Planner" is shown a dinner solution.</p></div>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+
+        <!-- Slide 6: Technical Solution -->
+        <section id="slide-4" class="slide">
+            <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" class="h-6" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">Technical Elements & Solution</h2>
+                <p class="text-center text-lg text-gray-600 mb-8 max-w-3xl mx-auto">Our solution is designed to be robust and scalable, integrating seamlessly with your existing data infrastructure.</p>
+                <h3 class="text-2xl font-bold mb-6 text-center">High-Level Architecture</h3>
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-8 md:space-y-0 md:space-x-8">
+                    <div class="text-center flex-1"><div class="bg-blue-100 text-blue-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">1</div><h4 class="font-bold text-lg">Retailer & DMP</h4><p class="text-sm text-gray-600">DMP segments users and writes a key-value pair to a cookie.</p></div>
+                    <div class="text-2xl text-gray-300 hidden md:block">&rarr;</div>
+                    <div class="text-center flex-1"><div class="bg-blue-100 text-blue-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">2</div><h4 class="font-bold text-lg">Flipp Platform</h4><p class="text-sm text-gray-600">Flipp reads the cookie and matches user data.</p></div>
+                    <div class="text-2xl text-gray-300 hidden md:block">&rarr;</div>
+                    <div class="text-center flex-1"><div class="bg-blue-100 text-blue-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">3</div><h4 class="font-bold text-lg">Dynamic Engine</h4><p class="text-sm text-gray-600">Engine assembles the correct flyer version.</p></div>
+                    <div class="text-2xl text-gray-300 hidden md:block">&rarr;</div>
+                    <div class="text-center flex-1"><div class="bg-blue-100 text-blue-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">4</div><h4 class="font-bold text-lg">Personalized Flyer</h4><p class="text-sm text-gray-600">User is served the tailored experience.</p></div>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+
+        <!-- Slide 7: Ensuring Right Flyer to Right User -->
+        <section id="slide-6" class="slide">
+            <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" class="h-6" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Ensuring the Right Flyer Reaches the Right User</h2>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                     <div class="p-8 rounded-lg bg-gray-50"><h3 class="text-2xl font-bold mb-4">Multi-Layered Targeting</h3><p class="text-lg text-gray-600 mb-4">We use a waterfall logic to ensure maximum accuracy and reach.</p><ol class="list-decimal list-inside space-y-4 text-lg"><li><span class="font-semibold">DMP Cookie Match:</span> The primary method, linking directly to your loyalty data.</li><li><span class="font-semibold">Flipp User Profile:</span> A fallback using Flipp's first-party data (shopping lists, clicks).</li><li><span class="font-semibold">Default Experience:</span> Unmatched users see the standard flyer. No one is left behind.</li></ol></div>
+                    <div><h3 class="text-2xl font-bold mb-4">The Matching Process</h3><div class="space-y-4"><div class="flex items-start"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">1</div><div class="ml-4"><p class="font-semibold">User visits with DMP cookie.</p></div></div><div class="flex items-start"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">2</div><div class="ml-4"><p class="font-semibold">Flipp's system detects the cookie.</p></div></div><div class="flex items-start"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">3</div><div class="ml-4"><p class="font-semibold">User is mapped to a segment.</p></div></div><div class="flex items-start"><div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">4</div><div class="ml-4"><p class="font-semibold">Personalized flyer is served.</p></div></div></div></div>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+
+        <!-- Slide 8: Retailer Requirements -->
+        <section id="slide-7" class="slide">
+            <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" class="h-6" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">What We Need From You to Succeed</h2>
+                <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">To launch this innovative pilot, we'll need the following assets and collaboration from your team.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="p-8 rounded-lg bg-gray-50 border"><h3 class="text-2xl font-bold mb-4">Technical Requirements</h3><ul class="list-disc list-inside space-y-3 text-lg"><li>Confirmation of DMP's ability to write key-value pairs to cookies.</li><li>Documentation of key-values for each audience segment.</li><li>Access to a technical lead for integration and testing.</li></ul></div>
+                    <div class="p-8 rounded-lg bg-gray-50 border"><h3 class="text-2xl font-bold mb-4">Content & Asset Requirements</h3><ul class="list-disc list-inside space-y-3 text-lg"><li>Standard weekly flyer PDF and pricing data.</li><li>Defined audience segments (3-4 recommended for pilot).</li><li>Prioritized list of products/SKUs for each segment.</li><li>High-resolution creative assets for prioritized items.</li></ul></div>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+        
+        <!-- Slide 9: Analytics (Revised) -->
+        <section id="slide-4" class="slide">
+            <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" class="h-6" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-6">Projected Impact of Personalization</h2>
+                <p class="text-center text-lg text-gray-600 mb-12 max-w-4xl mx-auto">By personalizing the flyer, we can significantly lift key performance metrics. Here's a projection of the potential impact based on similar initiatives.</p>
+                <div class="w-full bg-gray-50 p-8 rounded-xl border">
+                    <div class="flex justify-around text-center h-64 border-b border-gray-300">
+                        <!-- Metric 1: Flyer Opens -->
+                        <div class="flex flex-col justify-end w-1/3">
+                            <div class="flex justify-center items-end space-x-2 h-full">
+                                <div class="w-12 bg-gray-300 rounded-t-lg relative animated-bar" style="height: 50%;"><span class="absolute -top-6 left-1/2 -translate-x-1/2 font-bold text-gray-600">100%</span></div>
+                                <div class="w-12 bg-gradient-to-t from-blue-400 to-blue-600 rounded-t-lg relative animated-bar" style="height: 60%; transition-delay: 100ms;"><span class="absolute -top-6 left-1/2 -translate-x-1/2 font-bold text-blue-800">+10%</span></div>
+                            </div>
+                            <p class="mt-4 font-semibold">Flyer Opens</p>
+                        </div>
+                        <!-- Metric 2: Engagements -->
+                        <div class="flex flex-col justify-end w-1/3">
+                            <div class="flex justify-center items-end space-x-2 h-full">
+                                <div class="w-12 bg-gray-300 rounded-t-lg relative animated-bar" style="height: 40%;"><span class="absolute -top-6 left-1/2 -translate-x-1/2 font-bold text-gray-600">100%</span></div>
+                                <div class="w-12 bg-gradient-to-t from-blue-400 to-blue-600 rounded-t-lg relative animated-bar" style="height: 55%; transition-delay: 200ms;"><span class="absolute -top-6 left-1/2 -translate-x-1/2 font-bold text-blue-800">+15%</span></div>
+                            </div>
+                            <p class="mt-4 font-semibold">Engagements</p>
+                        </div>
+                        <!-- Metric 3: Item Clicks -->
+                        <div class="flex flex-col justify-end w-1/3">
+                            <div class="flex justify-center items-end space-x-2 h-full">
+                                <div class="w-12 bg-gray-300 rounded-t-lg relative animated-bar" style="height: 30%;"><span class="absolute -top-6 left-1/2 -translate-x-1/2 font-bold text-gray-600">100%</span></div>
+                                <div class="w-12 bg-gradient-to-t from-blue-400 to-blue-600 rounded-t-lg relative animated-bar" style="height: 48%; transition-delay: 300ms;"><span class="absolute -top-6 left-1/2 -translate-x-1/2 font-bold text-blue-800">+18%</span></div>
+                            </div>
+                            <p class="mt-4 font-semibold">Item Clicks</p>
+                        </div>
+                    </div>
+                    <!-- Legend -->
+                    <div class="flex justify-center mt-6 space-x-6">
+                        <div class="flex items-center"><div class="w-4 h-4 bg-gray-300 rounded-sm mr-2"></div><span>Current Performance</span></div>
+                        <div class="flex items-center"><div class="w-4 h-4 bg-blue-500 rounded-sm mr-2"></div><span>Projected with Personalization</span></div>
+                    </div>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+
+        <!-- Slide 10: Pilot Goals & Measurement -->
+        <section id="slide-8" class="slide">
+            <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" class="h-6" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Possible Pilot Goals & Measuring Success</h2>
+                <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">The two-month pilot is designed to provide clear, measurable results. We will track performance against a control group to validate the impact.</p>
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="p-8 text-center bg-blue-50 border-2 border-blue-100 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                        <h3 class="text-xl font-bold mb-2 text-blue-800">Engagement Lift</h3>
+                        <p class="text-4xl font-bold text-gray-800">+15%</p>
+                        <p class="text-gray-600">Increase in item clicks and time spent vs. controlled group.</p>
+                    </div>
+                    <div class="p-8 text-center bg-green-50 border-2 border-green-100 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                        <h3 class="text-xl font-bold mb-2 text-green-800">Shopping List Adds</h3>
+                        <p class="text-4xl font-bold text-gray-800">+20%</p>
+                        <p class="text-gray-600">Increase in personalized items added to lists.</p>
+                    </div>
+                    <div class="p-8 text-center bg-yellow-50 border-2 border-yellow-100 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 14v1m0-6v.01M12 12v.01M12 10v.01M12 8V7m0 1v.01M12 14v1m0-6v.01M12 12v.01M12 10v.01M12 8V7m0 1v.01M12 14v1m0-6v.01M12 12v.01M12 10v.01M12 8V7m0 1v.01M12 14v1m0-6v.01M12 12v.01M12 10v.01M12 8V7m0 1v.01M12 14v1m0-6v.01M12 12v.01M12 10v.01" />
+                           <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 14v1m0-6v.01M12 12v.01M12 10v.01" />
+                        </svg>
+                        <h3 class="text-xl font-bold mb-2 text-yellow-800">Positive ROI</h3>
+                        <p class="text-4xl font-bold text-gray-800">&gt;1.3</p>
+                        <p class="text-gray-600">Incremental sales lift exceeds investment.</p>
+                    </div>
+                </div>
+                 <p class="text-center text-sm text-gray-500 mt-8">*Goals are illustrative and will be finalized in partnership with your team.</p>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+
+        <!-- Slide 11: Next Steps -->
+        <section id="slide-9" class="slide text-white">
+             <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" class="h-6" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content flex items-center justify-center">
+                <div class="text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-8">Let's Build the Future of the Flyer, Together.</h2>
+                    <p class="text-xl md:text-2xl mb-12">We are excited about the potential of this partnership to drive meaningful results for your business.</p>
+                    <div class="flex flex-wrap justify-center gap-6 text-lg">
+                        <div class="bg-white/20 p-4 rounded-lg"><strong>1. Agree on Pilot Scope</strong></div>
+                        <div class="bg-white/20 p-4 rounded-lg"><strong>2. Technical Kick-off</strong></div>
+                        <div class="bg-white/20 p-4 rounded-lg"><strong>3. Launch Pilot</strong></div>
+                        <div class="bg-white/20 p-4 rounded-lg"><strong>4. Review & Plan Scale</strong></div>
+                    </div>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+
+        <!-- Slide 12: Questions & Suggestions -->
+        <section id="slide-10" class="slide">
+            <header class="slide-header">
+                <img src="cropped-blue-1000.png" alt="Flipp Logo" class="h-12" class="h-6" style="filter: brightness(0) invert(1);">
+                <img src="Freshcart.png" alt="Grocer Logo" class="h-12">
+            </header>
+            <div class="slide-content flex items-center justify-center">
+                <div class="text-center">
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Questions & Suggestions</h2>
+                    <p class="text-xl md:text-2xl text-gray-600 mb-12">We'd love to hear your thoughts and answer any questions.</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+            </div>
+            <footer class="slide-footer"></footer>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            let currentSlide = 0;
+
+            function buildFooters() {
+                slides.forEach((slide, index) => {
+                    const footer = slide.querySelector('.slide-footer');
+                    if (!footer) return;
+
+                    const slideNumber = `Slide ${index + 1} of ${slides.length}`;
+
+                    footer.innerHTML = `
+                        <span>${slideNumber}</span>
+                        <div class="nav-buttons-container">
+                            <button class="nav-button prev-btn">Previous</button>
+                            <button class="nav-button next-btn">Next</button>
+                        </div>
+                    `;
+                });
+            }
+
+            function updateNavButtons() {
+                const allPrevBtns = document.querySelectorAll('.prev-btn');
+                const allNextBtns = document.querySelectorAll('.next-btn');
+
+                allPrevBtns.forEach(btn => btn.classList.toggle('hidden', currentSlide === 0));
+                allNextBtns.forEach(btn => btn.classList.toggle('hidden', currentSlide === slides.length - 1));
+            }
+
+            function showSlide(newIndex) {
+                if (newIndex < 0 || newIndex >= slides.length) return;
+
+                const oldSlide = slides[currentSlide];
+                const newSlide = slides[newIndex];
+
+                if (oldSlide) {
+                    oldSlide.classList.remove('active');
+                }
+                if (newSlide) {
+                    newSlide.classList.add('active');
+                }
+                
+                currentSlide = newIndex;
+                updateNavButtons();
+            }
+
+            function setupEventListeners() {
+                // Main slide navigation
+                document.body.addEventListener('click', function(e) {
+                    if (e.target.matches('.next-btn') && currentSlide < slides.length - 1) {
+                        showSlide(currentSlide + 1);
+                    }
+                    if (e.target.matches('.prev-btn') && currentSlide > 0) {
+                        showSlide(currentSlide - 1);
+                    }
+                });
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowRight') {
+                        showSlide(currentSlide + 1);
+                    } else if (e.key === 'ArrowLeft') {
+                        showSlide(currentSlide - 1);
+                    }
+                });
+
+                // Persona buttons on Slide 3
+                const personaButtonsContainer = document.getElementById('persona-buttons');
+                if (personaButtonsContainer) {
+                    personaButtonsContainer.addEventListener('click', function(e) {
+                        const button = e.target.closest('.persona-button');
+                        if (!button) return;
+
+                        const imageUrl = button.dataset.image;
+                        const imageElement = document.getElementById('persona-image');
+
+                        // Update image source
+                        if (imageUrl && imageElement) {
+                            imageElement.src = imageUrl;
+                        }
+
+                        // Update active state for buttons
+                        personaButtonsContainer.querySelectorAll('.persona-button').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        button.classList.add('active');
+                    });
+                }
+            }
+
+            // Initial setup
+            buildFooters();
+            showSlide(0);
+            setupEventListeners();
+        });
+    </script>
+</body>
+</html>
